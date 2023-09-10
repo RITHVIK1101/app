@@ -19,7 +19,7 @@ def scrape_player_info(player_name):
         for player_info in player_infos:
             # Your scraping logic here
 
-        return player_data
+            return player_data
 
     except Exception as e:
         return str(e)
