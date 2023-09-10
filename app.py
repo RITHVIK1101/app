@@ -37,7 +37,7 @@ def scrape_player_info():
     except Exception as e:
         return str(e)
 
-@app.route('/get_player_info', methods=['GET'])
+@app.route('/get_player_info', methods=['GET', 'POST'])
 def get_player_info():
     try:
         player_name = request.args.get('player_name').upper()  # Extract and normalize player name
