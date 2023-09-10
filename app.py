@@ -40,7 +40,16 @@ def scrape_player_info():
 @app.route('/get_player_info', methods=['GET', 'POST'])
 def get_player_info():
     try:
-        player_name = request.args.get('player_name').upper()  # Extract and normalize player name
+        player_name = request.args.get('player_name')
+        if player_name is None:
+            # Handle the case where 'player_name' is missing or None
+            return jsonify({
+                "fulfillmentText": "Please provide a player name."
+            })
+
+        player_name = player_name.upper()  # Normalize player name
+        logging.info(f"Received request for player: {player_name}")
+
         player_data = scrape_player_info()
 
         # Find player information in the scraped data
@@ -67,3 +76,6 @@ def get_player_info():
         return jsonify({
             "fulfillmentText": f"An error occurred: {str(e)}"
         })
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=8080)
