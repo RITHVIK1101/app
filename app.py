@@ -50,23 +50,18 @@ def get_player_info():
         player_name = player_name.upper()  # Normalize player name
         logging.info(f"Received request for player: {player_name}")
 
-        player_data = scrape_player_info()
+        # Dynamically construct the URL with the player_name parameter
+        complete_url = f"https://ehsfb.azurewebsites.net/get_player_info?player_name={player_name}"
 
-        # Find player information in the scraped data
-        found_players = [player for player in player_data if player_name in player['Player Name'].upper()]
+        # Make a request to the constructed URL
+        response = requests.get(complete_url)
+        response_data = response.json()
 
-        if found_players:
-            # Take the first found player (you can modify this logic if needed)
-            player_info = found_players[0]
-
-            # Construct a response
-            response_text = (
-                f"{player_info['Player Name']} is in grade {player_info['Grade']}, "
-                f"plays as {player_info['Position']}, has a height of {player_info['Height']}, "
-                f"and a weight of {player_info['Weight']}."
-            )
+        # Extract the player information from the response
+        if 'fulfillmentText' in response_data:
+            response_text = response_data['fulfillmentText']
         else:
-            response_text = "Player not found."
+            response_text = "Player data not available."
 
         return jsonify({
             "fulfillmentText": response_text
@@ -76,3 +71,4 @@ def get_player_info():
         return jsonify({
             "fulfillmentText": f"An error occurred: {str(e)}"
         })
+
