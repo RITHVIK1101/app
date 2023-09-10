@@ -24,7 +24,7 @@ def scrape_player_info(player_name):
     except Exception as e:
         return str(e)
 
-@app.route('/get_player_info', methods=['GET'])
+@app.route('/get_player_info', methods=['GET', 'POST'])
 def get_player_info():
     try:
         # Extract the player_name parameter from the user's query
